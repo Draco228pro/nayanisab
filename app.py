@@ -76,7 +76,9 @@ def get_secret(name: str, default: str = ""):
 
 def render_logo():
     if LOGO_PATH.exists():
-        st.image(str(LOGO_PATH), width=220)
+        st.markdown('<div class="sidebar-brand-card">', unsafe_allow_html=True)
+        st.image(str(LOGO_PATH), use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.markdown("### NayaNisab")
         st.caption("Bringing Pakistani curricula up to tomorrow's standards.")
@@ -86,30 +88,45 @@ def render_band(score: float):
     b = score_band(score)
     cls = "band-warning" if score < 50 else "band-improve" if score <= 80 else "band-future"
     st.markdown(
-        f'<div class="{cls} animate-entrance"><b>{b["label"]}</b> — {b["headline"]}<br><span style="color: #64748b; font-size: 0.88rem;">{b["action"]}</span></div>',
+        f'<div class="{cls}"><b>{b["label"]}</b> — {b["headline"]}<br><span style="color: #64748b; font-size: 0.88rem;">{b["action"]}</span></div>',
         unsafe_allow_html=True,
     )
+
+
+def reset_analysis():
+    st.session_state.result = None
+    st.session_state.pdf_report = None
+    st.session_state.pdf_report_error = None
+    st.rerun()
 
 
 # --- Sidebar -----------------------------------------------------------------
 with st.sidebar:
     render_logo()
-    st.markdown("---")
     st.markdown("**NayaNisab Engine**")
     st.caption("AI-powered curriculum intelligence for Pakistani higher education institutions.")
-    st.markdown("**Pipeline Workflow**")
-    st.caption("1. Understand syllabus structure")
-    st.caption("2. Compare against international standards")
-    st.caption("3. Identify critical baseline gaps")
-    st.caption("4. Recommend action items")
-    st.caption("5. Generate updated curriculum proposal")
+    
+    st.markdown("<br>**Pipeline Workflow**", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="sidebar-step-list">
+            <div class="sidebar-step-item"><span class="step-badge">01</span><span>Extract & structure syllabus topics</span></div>
+            <div class="sidebar-step-item"><span class="step-badge">02</span><span>Benchmark against modern criteria</span></div>
+            <div class="sidebar-step-item"><span class="step-badge">03</span><span>Pinpoint structural baseline gaps</span></div>
+            <div class="sidebar-step-item"><span class="step-badge">04</span><span>Generate prioritized action steps</span></div>
+            <div class="sidebar-step-item"><span class="step-badge">05</span><span>Produce proposed curriculum draft</span></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    
     st.markdown("---")
     st.caption("The score is a heuristic decision-support system, not formal academic accreditation.")
 
 # --- App Body ----------------------------------------------------------------
 st.markdown(
     """
-    <div class="hero-container animate-entrance">
+    <div class="hero-container">
         <div class="hero-tag">Curriculum Intelligence • Pakistan</div>
         <h1 class="hero-title">NayaNisab</h1>
         <p class="hero-subtitle">Modernizing higher education curricula with precision gap analysis.</p>
@@ -159,26 +176,23 @@ if st.session_state.result is None:
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### Output Deliverables")
     cols = st.columns(5)
-    for col, title, body in zip(
-        cols,
-        [
-            "Modernisation Score",
-            "Gap Point Detection",
-            "Prioritized Steps",
-            "Structured Draft",
-            "Auditable Change Log",
-        ],
-        [
-            "0–100 alignment score mapped to industry domains.",
-            "The exact structural point where obsolescence emerges.",
-            "Immediate, mandatory, and long-term improvements.",
-            "A ready-to-circulate modernization curriculum.",
-            "Contextual line-item justifications for your board.",
-        ],
-    ):
+    steps = [
+        ("01", "Modernisation Score", "A transparent 0–100 alignment index mapped across key domains."),
+        ("02", "Gap Point Detection", "The exact structural semester or course where divergence starts."),
+        ("03", "Prioritized Steps", "Immediate, mandatory, and elective curriculum remediation."),
+        ("04", "Structured Draft", "Ready-to-circulate updated proposal built for Board of Studies."),
+        ("05", "Auditable Change Log", "Line-item justifications and rationale for each proposed revision."),
+    ]
+    for col, (num, title, body) in zip(cols, steps):
         with col:
             st.markdown(
-                f'<div class="content-card"><b>{title}</b><p style="color: #64748b; font-size: 0.85rem; margin-top: 6px;">{body}</p></div>',
+                f"""
+                <div class="deliverable-card">
+                    <div class="deliverable-num">Phase {num}</div>
+                    <div class="deliverable-title">{title}</div>
+                    <p class="deliverable-desc">{body}</p>
+                </div>
+                """,
                 unsafe_allow_html=True,
             )
 
@@ -230,31 +244,36 @@ else:
     result = st.session_state.result
     score = float(result["score"])
 
-    head_col, lottie_col = st.columns([3.5, 0.8])
-    with head_col:
+    # Header with title, instant reset button, and animation
+    head_title_col, head_btn_col, lottie_col = st.columns([3, 1, 0.6])
+    with head_title_col:
         st.markdown(f"## {result['university']} — {result['subject']}")
         st.caption(f"Analysis successfully conducted on {datetime.now().strftime('%d %b %Y, %H:%M')}")
+    with head_btn_col:
+        st.write("")
+        if st.button("➕ New Analysis", use_container_width=True):
+            reset_analysis()
     with lottie_col:
         success_anim = load_lottie_url("https://assets5.lottiefiles.com/packages/lf20_jbrw3hcz.json")
         if success_anim:
-            st_lottie(success_anim, height=75, loop=False, key="success_anim")
+            st_lottie(success_anim, height=65, loop=False, key="success_anim")
 
     a, b, c = st.columns([1, 1.2, 1.2])
     with a:
         st.markdown(
-            f'<div class="metric-box animate-entrance"><div class="metric-big-num">{score:.0f}</div><div class="metric-label-tag">Modernisation Score / 100</div></div>',
+            f'<div class="metric-box"><div class="metric-big-num">{score:.0f}</div><div class="metric-label-tag">Modernisation Score / 100</div></div>',
             unsafe_allow_html=True,
         )
     with b:
         high = sum(1 for d in result["benchmark"]["dimension_scores"] if d["score"] < 50)
         mid = sum(1 for d in result["benchmark"]["dimension_scores"] if 50 <= d["score"] <= 80)
         st.markdown(
-            f'<div class="metric-box animate-entrance"><div class="metric-big-num" style="color: #ef4444;">{high}</div><div class="metric-label-tag">High Gap Domains</div><div style="font-size:0.86rem; color:#64748b; margin-top:4px;"><b>{mid}</b> additional domains require review</div></div>',
+            f'<div class="metric-box"><div class="metric-big-num" style="color: #ef4444;">{high}</div><div class="metric-label-tag">High Gap Domains</div><div style="font-size:0.86rem; color:#64748b; margin-top:4px;"><b>{mid}</b> additional domains require review</div></div>',
             unsafe_allow_html=True,
         )
     with c:
         st.markdown(
-            '<div class="metric-box animate-entrance"><b>Institutional Guidance</b><p style="color:#64748b; font-size:0.86rem; margin-top:6px;">Draft findings should be deliberated within the departmental Board of Studies prior to statutory updates.</p></div>',
+            '<div class="metric-box"><b>Institutional Guidance</b><p style="color:#64748b; font-size:0.86rem; margin-top:6px;">Draft findings should be deliberated within the departmental Board of Studies prior to statutory updates.</p></div>',
             unsafe_allow_html=True,
         )
 
@@ -459,7 +478,4 @@ else:
 
     with new_col:
         if st.button("↩️ Reset & Start New Analysis", use_container_width=True):
-            st.session_state.result = None
-            st.session_state.pdf_report = None
-            st.session_state.pdf_report_error = None
-            st.rerun()
+            reset_analysis()
