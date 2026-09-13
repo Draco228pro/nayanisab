@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --navy: #0e1726;
+  --forest: #0b6e4f;
+  --forest-soft: #eaf5ef;
+  --surface: #ffffff;
+  --surface-alt: #f8fafc;
+  --border-subtle: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+}
+
+html, body, [class*="css"] {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+  background-color: #fbfdfc;
+}
+
+.block-container {
+  max-width: 1280px;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+/* Animations */
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-entrance {
+  animation: fadeInSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+  background-color: #f8faf9;
+  border-right: 1px solid var(--border-subtle);
+}
+
+/* Hero Section */
+.hero-container {
+  background: linear-gradient(135deg, #ffffff 0%, #f4faf6 50%, #edf7f2 100%);
+  border: 1px solid #dbeae0;
+  border-radius: 20px;
+  padding: 32px 36px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--forest);
+  background: #ffffff;
+  border: 1px solid #d1e7da;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: #475569;
+  margin: 0;
+}
+
+/* Cards & UI Blocks */
+.content-card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 20px;
+  height: 100%;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+
+.metric-box {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  height: 100%;
+}
+
+.metric-big-num {
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--navy);
+  letter-spacing: -0.03em;
+}
+
+.metric-label-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+/* Bands & Alerts */
+.band-warning {
+  border-left: 5px solid #ef4444;
+  background: #fef2f2;
+  border-radius: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #fee2e2;
+  border-right: 1px solid #fee2e2;
+  border-bottom: 1px solid #fee2e2;
+}
+
+.band-improve {
+  border-left: 5px solid #f59e0b;
+  background: #fffbeb;
+  border-radius: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #fef3c7;
+  border-right: 1px solid #fef3c7;
+  border-bottom: 1px solid #fef3c7;
+}
+
+.band-future {
+  border-left: 5px solid #10b981;
+  background: #ecfdf5;
+  border-radius: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #d1fae5;
+  border-right: 1px solid #d1fae5;
+  border-bottom: 1px solid #d1fae5;
+}
+
+/* Tab Redesign */
+.stTabs [data-baseweb="tab-list"] {
+  gap: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 6px;
+}
+
+.stTabs [data-baseweb="tab"] {
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.stTabs [aria-selected="true"] {
+  background-color: var(--forest-soft) !important;
+  color: var(--forest) !important;
+}
+
+/* Buttons */
+.stButton > button {
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.15s ease-in-out;
+}
+
+.stButton > button:hover {
+  transform: translateY(-1px);
+}
